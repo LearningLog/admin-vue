@@ -7,7 +7,6 @@ const http = axios.create({
 
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
-  console.log(1)
   if (config.url !== '/login') {
     config.headers['Authorization'] = getToken()
   }
@@ -22,9 +21,6 @@ const httpPlugin = {}
 
 // 2.为插件对象添加一个成员：install
 httpPlugin.install = function (Vue, options) {
-  // axios.create([config])
-  // https://github.com/axios/axios#axioscreateconfig
-
   // 3. 给 Vue 添加实例方法
   Vue.prototype.$http = http
 }

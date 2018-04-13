@@ -10,7 +10,7 @@
       </el-col>
     </el-row>
     <el-row class="user-list-search">
-      <el-col :span="8">
+      <el-col :span="6">
         <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
@@ -31,22 +31,43 @@
       <el-table-column
         prop="email"
         label="邮箱"
-        width="180">
+        width="280">
       </el-table-column>
       <el-table-column
         prop="mobile"
-        label="电话">
+        label="电话"
+        width="280">
+      </el-table-column>
+      <el-table-column
+        label="用户状态"
+        width="100">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.mg_state"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        width="285">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-edit" circle></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+          <el-button type="success" icon="el-icon-check" circle></el-button>
+        </template>
       </el-table-column>
       </el-table>
       <div class="block user-list-pagination">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :current-page.sync="currentPage"
+          :page-sizes="[1, 2, 3, 4]"
+          :page-size="1"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
+          :total="totalSize">
         </el-pagination>
       </div>
   </div>
@@ -55,27 +76,38 @@
 <script>
 export default {
   async created () {
-    const res = await this.$http.get('/users', {
-      params: {
-        pagenum: 1,
-        pagesize: 5
-      }
-    })
-    console.log(res)
-    this.tableData = res.data.data.users
+    this.loadUserByPage(1, 1)
   },
   data () {
     return {
       searchText: '',
-      tableData: []
+      tableData: [], // 用户信息（表格数据）
+      totalSize: 0, // 总数据条数
+      currentPage: 1, // 当前页码
+      pageSize: 1 // 当前每页条数
     }
   },
   methods: {
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+    handleSizeChange (pageSize) {
+      console.log(`每页 ${pageSize} 条`)
+      this.pageSize = pageSize
+      this.loadUserByPage(1, pageSize)
+      this.currentPage = 1
     },
-    handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+    handleCurrentChange (currentPage) {
+      console.log(`当前页: ${currentPage}`)
+      this.loadUserByPage(currentPage, this.pageSize)
+    },
+    async loadUserByPage (page, pageSize = 1) {
+      const res = await this.$http.get('/users', {
+        params: {
+          pagenum: page,
+          pagesize: pageSize
+        }
+      })
+      const {users, total} = res.data.data
+      this.tableData = users
+      this.totalSize = total
     }
   }
 }
