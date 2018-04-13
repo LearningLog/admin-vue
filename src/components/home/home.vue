@@ -13,7 +13,7 @@
           :unique-opened="true"
           :router="true"
           default-active="2"
-          class="el-menu-vertical-demo"
+          class="el-menu-vertical-demo aside-menu"
           @open="handleOpen"
           @close="handleClose"
           background-color="#545c64"
@@ -24,37 +24,29 @@
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item-group>
               <el-menu-item index="/users">用户列表</el-menu-item>
-            </el-menu-item-group>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
               <i class="el-icon-menu"></i>
               <span>权限管理</span>
             </template>
-            <el-menu-item-group>
               <el-menu-item index="/roles">角色列表</el-menu-item>
               <el-menu-item index="2-2">权限列表</el-menu-item>
-            </el-menu-item-group>
           </el-submenu>
           <el-submenu index="3">
             <template slot="title">
               <i class="el-icon-document"></i>
               <span>导航三</span>
             </template>
-            <el-menu-item-group>
               <el-menu-item index="3-1">用户管理</el-menu-item>
-            </el-menu-item-group>
           </el-submenu>
           <el-submenu index="4">
             <template slot="title">
               <i class="el-icon-setting"></i>
               <span>导航四</span>
             </template>
-            <el-menu-item-group>
               <el-menu-item index="4-1">用户管理</el-menu-item>
-            </el-menu-item-group>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -66,6 +58,7 @@
 </template>
 
 <script>
+import {removeUserInfo} from '@/assets/js/auth'
 export default {
   data () {
     return {
@@ -88,7 +81,7 @@ export default {
           type: 'success',
           message: '退出成功!'
         })
-        window.localStorage.removeItem('admin-token')
+        removeUserInfo()
         this.$router.push({
           name: 'login'
         })
@@ -108,7 +101,10 @@ export default {
   background-color: #B3C0D1;
 }
 .el-aside {
-    background-color: #D3DCE6;
+    background-color: #545c64
+}
+.el-submenu__title {
+  width: 200px;
 }
 .el-main {
     background-color: #E9EEF3;

@@ -54,9 +54,10 @@
 
 <script>
 import axios from 'axios'
+import {getToken} from '@/assets/js/auth'
 export default {
   async created () {
-    const {token} = JSON.parse(window.localStorage.getItem('admin-token'))
+    const token = getToken()
     console.log(token)
     const res = await axios.get('http://localhost:8888/api/private/v1/users', {
       headers: {
@@ -95,6 +96,7 @@ export default {
 .user-list-search {
   margin-bottom: 10px;
 }
+
 .user-list-pagination {
   margin: 10px 0;
 }

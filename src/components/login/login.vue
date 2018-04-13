@@ -19,8 +19,9 @@
 </template>
 
 <script>
-import '../../assets/css/style.css'
+import '@/assets/css/style.css'
 import axios from 'axios'
+import {saveUserInfo} from '@/assets/js/auth'
 export default {
   data () {
     return {
@@ -35,7 +36,7 @@ export default {
       const res = await axios.post('http://localhost:8888/api/private/v1/login', this.userForm)
       const data = res.data
       if (data.meta.status === 200) {
-        window.localStorage.setItem('admin-token', JSON.stringify(data.data))
+        saveUserInfo(data.data)
         this.$router.push({
           name: 'home'
         })
