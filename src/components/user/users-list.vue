@@ -53,15 +53,9 @@
 </template>
 
 <script>
-import {getToken} from '@/assets/js/auth'
 export default {
   async created () {
-    const token = getToken()
-    console.log(token)
     const res = await this.$http.get('/users', {
-      headers: {
-        Authorization: token
-      },
       params: {
         pagenum: 1,
         pagesize: 5
