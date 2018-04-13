@@ -61,6 +61,7 @@ export default {
         pagesize: 5
       }
     })
+    console.log(res)
     this.tableData = res.data.data.users
   },
   data () {

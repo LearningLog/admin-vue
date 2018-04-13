@@ -6,7 +6,8 @@ const http = axios.create({
 })
 
 // 添加请求拦截器
-axios.interceptors.request.use(function (config) {
+http.interceptors.request.use(function (config) {
+  console.log(1)
   if (config.url !== '/login') {
     config.headers['Authorization'] = getToken()
   }
