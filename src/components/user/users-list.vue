@@ -53,13 +53,12 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {getToken} from '@/assets/js/auth'
 export default {
   async created () {
     const token = getToken()
     console.log(token)
-    const res = await axios.get('http://localhost:8888/api/private/v1/users', {
+    const res = await this.$http.get('/users', {
       headers: {
         Authorization: token
       },
