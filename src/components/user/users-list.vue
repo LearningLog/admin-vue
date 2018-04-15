@@ -11,7 +11,7 @@
     </el-row>
     <el-row class="user-list-search">
       <el-col :span="6">
-        <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
+        <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select" clearable>
           <el-button
             slot="append"
             icon="el-icon-search"
@@ -77,24 +77,28 @@
           :total="totalSize">
         </el-pagination>
       </div>
-      <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-        <el-form :model="userForm">
-          <el-form-item label="用户姓名" label-width="80px">
+      <el-dialog title="添加用户"
+        :visible.sync="dialogFormVisible">
+        <el-form
+          :model="userForm"
+          :rules="addUserRules"
+          ref="addUserForm">
+          <el-form-item label="用户姓名" prop="username" label-width="80px">
             <el-input
               v-model="userForm.username"
               auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="密码" label-width="80px">
+          <el-form-item label="密码" prop="password" label-width="80px">
             <el-input
               v-model="userForm.password"
               auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="邮箱" label-width="80px">
+          <el-form-item label="邮箱" prop="email" label-width="80px">
             <el-input
               v-model="userForm.email"
               auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="电话" label-width="80px">
+          <el-form-item label="电话" prop="mobile" label-width="80px">
             <el-input
               v-model="userForm.mobile"
               auto-complete="off"></el-input>
@@ -128,6 +132,22 @@ export default {
         password: '',
         email: '',
         mobile: ''
+      },
+      addUserRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' }
+        ],
+        mobile: [
+          { required: true, message: '请输入电话', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -171,16 +191,21 @@ export default {
       }
     },
     async handleAddUser () {
-      const res = await this.$http.post('users', this.userForm)
-      console.log(res)
-      if (res.data.meta.status === 201) {
-        this.$message({
-          type: 'success',
-          message: '添加用户成功'
-        })
+      this.$refs['addUserForm'].validate(async (valid) => {
+        if (!valid) {
+          return false
+        }
+        const res = await this.$http.post('users', this.userForm)
+        console.log(res)
+        if (res.data.meta.status === 201) {
+          this.$message({
+            type: 'success',
+            message: '添加用户成功'
+          })
           this.dialogFormVisible = false
           this.loadUserByPage(this.currentPage)
-      }
+        }
+      })
     }
   }
 }
