@@ -19,7 +19,10 @@
         </el-input>
       </el-col>
       <el-col :span="2">
-        <el-button type="success" plain>添加用户</el-button>
+        <el-button
+          type="success"
+          plain
+          @click="dialogFormVisible = true">添加用户</el-button>
       </el-col>
     </el-row>
     <el-table
@@ -74,6 +77,36 @@
           :total="totalSize">
         </el-pagination>
       </div>
+      <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+        <el-form :model="userForm">
+          <el-form-item label="用户姓名" label-width="80px">
+            <el-input
+              v-model="userForm.username"
+              auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" label-width="80px">
+            <el-input
+              v-model="userForm.password"
+              auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" label-width="80px">
+            <el-input
+              v-model="userForm.email"
+              auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="电话" label-width="80px">
+            <el-input
+              v-model="userForm.mobile"
+              auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="handleAddUser">确 定</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
@@ -88,7 +121,14 @@ export default {
       tableData: [], // 用户信息（表格数据）
       totalSize: 0, // 总数据条数
       currentPage: 1, // 当前页码
-      pageSize: 1 // 当前每页条数
+      pageSize: 1, // 当前每页条数
+      dialogFormVisible: false,
+      userForm: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      }
     }
   },
   methods: {
@@ -128,6 +168,18 @@ export default {
           type: 'success',
           message: `用户状态${state ? '启用' : '禁用'} 成功`
         })
+      }
+    },
+    async handleAddUser () {
+      const res = await this.$http.post('users', this.userForm)
+      console.log(res)
+      if (res.data.meta.status === 201) {
+        this.$message({
+          type: 'success',
+          message: '添加用户成功'
+        })
+          this.dialogFormVisible = false
+          this.loadUserByPage(this.currentPage)
       }
     }
   }
