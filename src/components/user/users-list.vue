@@ -60,7 +60,11 @@
         label="操作"
         width="285">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle></el-button>
+          <el-button
+            type="primary"
+              icon="el-icon-edit"
+              circle
+              @click="handleShowEditForm(scope.row)"></el-button>
           <el-button
             type="danger"
             icon="el-icon-delete"
@@ -115,6 +119,33 @@
             @click="handleAddUser">确 定</el-button>
         </div>
       </el-dialog>
+      <el-dialog title="编辑用户"
+        :visible.sync="dialogEditFormVisible">
+        <el-form
+          :model="editUserForm">
+          <el-form-item label="用户姓名" prop="username" label-width="80px">
+            <el-input
+              v-model="editUserForm.username"
+              auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email" label-width="80px">
+            <el-input
+              v-model="editUserForm.email"
+              auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="电话" prop="mobile" label-width="80px">
+            <el-input
+              v-model="editUserForm.mobile"
+              auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogEditFormVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="handleEditUser">确 定</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
@@ -137,6 +168,13 @@ export default {
         email: '',
         mobile: ''
       },
+      editUserForm: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
+      dialogEditFormVisible: false,
       addUserRules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -235,6 +273,25 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    async handleShowEditForm  (user) {
+      this.dialogEditFormVisible = true
+      const res = await this.$http.get(`users/${user.id}`)
+      console.log(res)
+      this.editUserForm = res.data.data
+    },
+    async handleEditUser () {
+      const {id: userId} = this.editUserForm
+      const res = await this.$http.put(`users/${userId}`, this.editUserForm)
+      console.log(res)
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '更新用户成功'
+        })
+        this.dialogEditFormVisible = false
+        this.loadUserByPage(this.currentPage)
+      }
     }
   }
 }
