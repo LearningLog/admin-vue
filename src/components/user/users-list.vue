@@ -48,7 +48,8 @@
           <el-switch
             v-model="scope.row.mg_state"
             active-color="#13ce66"
-            inactive-color="#ff4949">
+            inactive-color="#ff4949"
+            @change="(val) => {handleUserStateChange(val, scope.row)}">
           </el-switch>
         </template>
       </el-table-column>
@@ -116,6 +117,18 @@ export default {
       const {users, total} = res.data.data
       this.tableData = users
       this.totalSize = total
+    },
+    async handleUserStateChange (state, user) {
+      console.log(state, user)
+      const {id: userId} = user
+      const res = await this.$http.put(`users/${userId}}/state/${state}`)
+      // console.log(res)
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: `用户状态${state ? '启用' : '禁用'} 成功`
+        })
+      }
     }
   }
 }
