@@ -61,7 +61,11 @@
         width="285">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            circle
+            @click="handleDeleteUser(scope.row)"></el-button>
           <el-button type="success" icon="el-icon-check" circle></el-button>
         </template>
       </el-table-column>
@@ -205,9 +209,31 @@ export default {
           this.dialogFormVisible = false
           this.loadUserByPage(this.currentPage)
           for (let key in this.userForm) {
-            this.userForm[kye] = ''
+            this.userForm[key] = ''
           }
         }
+      })
+    },
+    async handleDeleteUser (user) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const res = await this.$http.delete(`users/${user.id}`)
+        console.log(res)
+        if (res.data.meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '删除用户成功'
+          })
+          this.loadUserByPage(this.currentPage)
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     }
   }
