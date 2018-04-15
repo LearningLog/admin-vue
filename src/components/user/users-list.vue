@@ -12,7 +12,10 @@
     <el-row class="user-list-search">
       <el-col :span="6">
         <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button
+            slot="append"
+            icon="el-icon-search"
+            @click="handleSearch"></el-button>
         </el-input>
       </el-col>
       <el-col :span="2">
@@ -76,7 +79,7 @@
 <script>
 export default {
   async created () {
-    this.loadUserByPage(1, 1)
+    this.loadUserByPage(1)
   },
   data () {
     return {
@@ -88,21 +91,26 @@ export default {
     }
   },
   methods: {
-    handleSizeChange (pageSize) {
-      console.log(`每页 ${pageSize} 条`)
+    async handleSizeChange (pageSize) {
+      // console.log(`每页 ${pageSize} 条`)
       this.pageSize = pageSize
       this.loadUserByPage(1, pageSize)
       this.currentPage = 1
     },
-    handleCurrentChange (currentPage) {
-      console.log(`当前页: ${currentPage}`)
+    async handleCurrentChange (currentPage) {
+      // console.log(`当前页: ${currentPage}`)
       this.loadUserByPage(currentPage, this.pageSize)
     },
-    async loadUserByPage (page, pageSize = 1) {
+    handleSearch () {
+      // console.log(this.searchText)
+      this.loadUserByPage(1)
+    },
+    async loadUserByPage (page) {
       const res = await this.$http.get('/users', {
         params: {
           pagenum: page,
-          pagesize: pageSize
+          pagesize: this.pageSize,
+          query: this.searchText
         }
       })
       const {users, total} = res.data.data
