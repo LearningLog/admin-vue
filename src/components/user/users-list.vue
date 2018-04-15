@@ -204,6 +204,9 @@ export default {
           })
           this.dialogFormVisible = false
           this.loadUserByPage(this.currentPage)
+          for (let key in this.userForm) {
+            this.userForm[kye] = ''
+          }
         }
       })
     }
