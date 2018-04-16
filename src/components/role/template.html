@@ -1,0 +1,77 @@
+<div>
+  <el-row :span="24" class="list-breadcrumb">
+    <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>权限管理</el-breadcrumb-item>
+      <el-breadcrumb-item>角色列表</el-breadcrumb-item>
+    </el-breadcrumb>
+  </el-row>
+  <el-button type="success" plain>添加角色</el-button>
+  <el-table
+    :data="tableData5"
+    style="width: 100%"
+    border
+    stripe>
+    <el-table-column type="expand">
+      <template slot-scope="scope">
+        <el-row
+          v-for="level1 in scope.row.children"
+          :key="level1.id">
+          <el-col :span="4" class="row-level1">
+            <el-tag
+              closable
+              type="">
+              {{level1.authName}}
+            </el-tag>
+            <i class="el-icon-arrow-right
+            "></i>
+          </el-col>
+          <el-col :span="20">
+            <el-row v-for="level2 in level1.children" :key="level2.id" class="bottom-line">
+              <el-col :span="4" class="row-level2">
+                <el-tag
+                  closable
+                  type="success">
+                  {{level2.authName}}
+                </el-tag>
+                <i class="el-icon-arrow-right
+                "></i>
+              </el-col>
+              <el-col :span="20">
+                <el-tag
+                  class="row-level3"
+                  v-for="level3 in level2.children"
+                  :key="level3.id"
+                  closable
+                  type="warning">
+                  {{level3.authName}}
+              </el-tag>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </template>
+    </el-table-column>
+    <el-table-column
+        type="index">
+    </el-table-column>
+    <el-table-column
+      label="角色名称"
+      prop="roleName"
+      width="200px">
+    </el-table-column>
+    <el-table-column
+      label="描述"
+      prop="roleDesc"
+      width="500px">
+    </el-table-column>
+    <el-table-column
+      label="操作">
+      <template slot-scope="scope">
+        <el-button type="primary" icon="el-icon-edit" plain size="small"></el-button>
+        <el-button type="danger" icon="el-icon-delete" plain size="small"></el-button>
+        <el-button type="success" icon="el-icon-check" plain size="small"></el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</div>

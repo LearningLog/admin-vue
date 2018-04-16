@@ -1,12 +1,10 @@
 <div class="user-list-wrap">
-  <el-row class="user-list-breadcrumb">
-    <el-col :span="24">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
+  <el-row :span="24" class="list-breadcrumb">
+      <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>用户管理</el-breadcrumb-item>
         <el-breadcrumb-item>用户列表</el-breadcrumb-item>
       </el-breadcrumb>
-    </el-col>
   </el-row>
   <el-row class="user-list-search">
     <el-col :span="6">
@@ -33,9 +31,9 @@
     </el-table-column>
     <el-table-column label="操作" width="285">
       <template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" circle @click="handleShowEditForm(scope.row)"></el-button>
-        <el-button type="danger" icon="el-icon-delete" circle @click="handleDeleteUser(scope.row)"></el-button>
-        <el-button type="success" icon="el-icon-check" circle></el-button>
+        <el-button type="primary" icon="el-icon-edit" circle size="small" @click="handleShowEditForm(scope.row)"></el-button>
+        <el-button type="danger" icon="el-icon-delete" circle size="small" @click="handleDeleteUser(scope.row)"></el-button>
+        <el-button type="success" icon="el-icon-check" size="small" circle></el-button>
       </template>
     </el-table-column>
   </el-table>

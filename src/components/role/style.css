@@ -1,0 +1,15 @@
+.row-level1 {
+  margin: 5px 0;
+}
+
+.row-level2 {
+  margin: 5px 0;
+}
+
+.row-level3 {
+  margin: 5px 2px 2px 2px;
+}
+
+.bottom-line {
+  border-bottom: 1px solid #ddd;
+}
