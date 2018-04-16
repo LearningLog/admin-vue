@@ -9,6 +9,9 @@ import UserList from '@/components/user/users-list.vue'
 
 // 角色管理部分
 import RoleList from '@/components/role/role-list.vue'
+
+// 权限列表
+import RightsList from '@/components/rights-list/rights-list.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -32,6 +35,11 @@ const router = new Router({
           name: 'role-list',
           path: '/roles',
           component: RoleList
+        },
+        {
+          name: 'rights-list',
+          path: '/rights',
+          component: RightsList
         }
       ]
     }
