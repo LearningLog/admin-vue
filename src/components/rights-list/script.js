@@ -4,7 +4,8 @@ export default {
   },
   data () {
     return {
-      tableData: []
+      tableData: [],
+      loading: true
     }
   },
   methods: {
@@ -14,6 +15,7 @@ export default {
       const {data, meta} = res.data
       if (meta.status === 200) {
         this.tableData = data
+        this.loading = false
       }
     }
   }
