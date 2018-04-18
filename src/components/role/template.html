@@ -71,9 +71,19 @@
     <el-table-column
       label="操作">
       <template slot-scope="scope">
-        <el-button type="primary" icon="el-icon-edit" plain size="small"></el-button>
-        <el-button type="danger" icon="el-icon-delete" plain size="small"></el-button>
-        <el-button type="success" icon="el-icon-check" plain size="small"></el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-edit"
+          plain
+          size="mini"
+          @click="handleGetRoleInfo(scope.row)"></el-button>
+        <el-button
+          type="danger"
+          icon="el-icon-delete"
+          plain
+          size="mini"
+          @click="handleDeleteRole(scope.row)"></el-button>
+        <el-button type="success" icon="el-icon-check" plain size="mini"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -93,4 +103,20 @@
     </div>
   </el-dialog>
   <!-- /添加角色列表 -->
+  <!-- 编辑角色列表 -->
+  <el-dialog title="添加角色" :visible.sync="editRoleDialog">
+    <el-form :model="editRoleForm">
+      <el-form-item label="角色名称" label-width="80px">
+        <el-input v-model="editRoleForm.roleName" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="角色描述" label-width="80px">
+        <el-input v-model="editRoleForm.roleDesc" auto-complete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="editRoleDialog = false">取 消</el-button>
+      <el-button type="primary" @click="handlEditRole">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- /编辑角色列表 -->
 </div>
