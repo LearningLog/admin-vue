@@ -21,7 +21,8 @@ export default {
         children: 'children',
         label: 'authName'
       },
-      treeCheckedKeys: []
+      treeCheckedKeys: [],
+      currentRole: null
     }
   },
   methods: {
@@ -98,12 +99,51 @@ export default {
       }
     },
 
-    async handleShowRights () {
-      this.treeShowDialog = true
+    /**
+     * 获取权限id
+     */
+    getLevel3Ids (rightsList) {
+      const arr = []
+      const f = function (rightsList) {
+        rightsList.forEach(function (item) {
+          if (!item.children) {
+            arr.push(item.id)
+          } else {
+            f(item.children)
+          }
+        })
+      }
+      f(rightsList)
+      return arr
+    },
+
+    async handleShowRights (role) {
       const res = await this.$http.get('rights/tree')
       const {data, meta} = res.data
       if (meta.status === 200) {
         this.treeData = data
+        this.treeCheckedKeys = this.getLevel3Ids(role.children)
+        this.treeShowDialog = true
+        this.currentRole = role
+      }
+    },
+
+    async handleEditRightsTree () {
+      const checkedIdList = this.$refs.rightsTree.getCheckedKeys()
+      const halfIdList = this.$refs.rightsTree.getHalfCheckedKeys()
+      const rightsIdList = checkedIdList.concat(halfIdList).join(',')
+      // console.log(rightsIdList)
+      const res = await this.$http.post(`roles/${this.currentRole.id}/rights`, {
+        rids: rightsIdList
+      })
+      const {meta} = res.data
+      if (meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '角色授权成功'
+        })
+        this.loadRoles()
+        this.treeShowDialog = false
       }
     }
   }
