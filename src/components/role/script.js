@@ -14,7 +14,14 @@ export default {
         roleName: '',
         roleDesc: ''
       },
-      editRoleDialog: false
+      editRoleDialog: false,
+      treeShowDialog: false,
+      treeData: [],
+      treeProps: {
+        children: 'children',
+        label: 'authName'
+      },
+      treeCheckedKeys: []
     }
   },
   methods: {
@@ -88,6 +95,15 @@ export default {
         })
         this.editRoleDialog = false
         this.loadRoles()
+      }
+    },
+
+    async handleShowRights () {
+      this.treeShowDialog = true
+      const res = await this.$http.get('rights/tree')
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        this.treeData = data
       }
     }
   }

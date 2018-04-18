@@ -83,7 +83,12 @@
           plain
           size="mini"
           @click="handleDeleteRole(scope.row)"></el-button>
-        <el-button type="success" icon="el-icon-check" plain size="mini"></el-button>
+        <el-button
+          type="success"
+          icon="el-icon-check"
+          plain
+          size="mini"
+          @click="handleShowRights(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -119,4 +124,22 @@
     </div>
   </el-dialog>
   <!-- /编辑角色列表 -->
+  <!-- 角色授权弹框 -->
+  <!-- node-key="id"
+
+      :default-checked-keys="[5]" -->
+  <el-dialog title="授权角色" :visible.sync="treeShowDialog">
+    <el-tree
+      :data="treeData"
+      show-checkbox
+      default-expand-all
+      :default-checked-keys="treeCheckedKeys"
+      :props="treeProps">
+    </el-tree>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="treeShowDialog = false">取 消</el-button>
+      <el-button type="primary" @click="treeShowDialog = false">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- /角色授权弹框 -->
 </div>
