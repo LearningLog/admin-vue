@@ -10,7 +10,11 @@ export function getUserInfo () {
 }
 
 export function getToken () {
-  return JSON.parse(getUserInfo()).token
+  try {
+    return JSON.parse(getUserInfo()).token
+  } catch (error) {
+    return ''
+  }
 }
 
 export function removeUserInfo () {

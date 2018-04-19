@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {getToken} from './auth'
+import router from '@/router/index'
 
 const http = axios.create({
   baseURL: 'http://localhost:8888/api/private/v1/'
@@ -19,8 +20,16 @@ http.interceptors.request.use(function (config) {
 // 添加一个响应拦截器
 http.interceptors.response.use(function (response) {
   console.log(response)
-  if (response.data.meta.status === 403) {
+  const {meta} = response.data
+  if (meta.status === 403) {
     window.alert('你没有权限执行该操作')
+  } else if (meta.status === 401) {
+    router.push({
+      name: 'login',
+      query: {
+        redirect: window.location.hash
+      }
+    })
   }
   // 类似于 next()，放行通过响应拦截器
   return response
