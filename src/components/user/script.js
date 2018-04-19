@@ -38,7 +38,13 @@ export default {
         mobile: [
           { required: true, message: '请输入电话', trigger: 'blur' }
         ]
-      }
+      },
+      showUserRoleDialog: false,
+      userRoleForm: {
+        username: '',
+        rid: -1
+      },
+      roleList: []
     }
   },
   methods: {
@@ -122,12 +128,14 @@ export default {
         })
       })
     },
+
     async handleShowEditForm (user) {
       this.dialogEditFormVisible = true
       const res = await this.$http.get(`users/${user.id}`)
       console.log(res)
       this.editUserForm = res.data.data
     },
+
     async handleEditUser () {
       const { id: userId } = this.editUserForm
       const res = await this.$http.put(`users/${userId}`, this.editUserForm)
@@ -139,6 +147,35 @@ export default {
         })
         this.dialogEditFormVisible = false
         this.loadUserByPage(this.currentPage)
+      }
+    },
+
+    async handleUserRight (user) {
+      // console.log(user)
+      this.showUserRoleDialog = true
+      const res = await this.$http.get(`users/${user.id}`)
+      const {data, meta} = res.data
+      // console.log(data)
+      const roleRes = await this.$http.get('roles')
+      console.log(res, roleRes)
+      if (meta.status === 200 && roleRes.data.meta.status === 200) {
+        this.userRoleForm = data
+        this.roleList = roleRes.data.data
+      }
+    },
+
+    async handleCheckRole () {
+      const {id: userId, rid: roleId} = this.userRoleForm
+      const res = await this.$http.put(`users/${userId}/role`, {
+        rid: roleId
+      })
+      const {meta} = res.data
+      if (meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '分配角色成功'
+        })
+        this.showUserRoleDialog = false
       }
     }
   }
