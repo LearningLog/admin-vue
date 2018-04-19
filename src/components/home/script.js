@@ -2,7 +2,11 @@ import {removeUserInfo} from '@/assets/js/auth'
 export default {
   data () {
     return {
+      menuList: []
     }
+  },
+  created () {
+    this.loadMenu()
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -28,6 +32,15 @@ export default {
       }).catch(() => {
         // 捕获出错
       })
+    },
+
+    async loadMenu () {
+      const res = await this.$http.get('menus')
+      const {data, meta} = res.data
+      // console.log(data)
+      if (meta.status === 200) {
+        this.menuList = data
+      }
     }
   }
 }
