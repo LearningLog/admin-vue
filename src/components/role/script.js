@@ -145,6 +145,19 @@ export default {
         this.loadRoles()
         this.treeShowDialog = false
       }
+    },
+
+    async handleRemoveRight (role, right) {
+      // console.log(role, right)
+      const res = await this.$http.delete(`roles/${role.id}/rights/${right.id}`)
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '删除权限成功'
+        })
+        role.children = data
+      }
     }
   }
 }
