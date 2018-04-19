@@ -15,6 +15,19 @@ http.interceptors.request.use(function (config) {
   // Do something with request error
   return Promise.reject(error)
 })
+
+// 添加一个响应拦截器
+http.interceptors.response.use(function (response) {
+  console.log(response)
+  if (response.data.meta.status === 403) {
+    window.alert('你没有权限执行该操作')
+  }
+  // 类似于 next()，放行通过响应拦截器
+  return response
+}, function (error) {
+  // Do something with response error
+  return Promise.reject(error)
+})
 // 通过定义插件配置来扩展 Vue 本身
 // 1.定义一个插件对象
 const httpPlugin = {}
